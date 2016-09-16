@@ -43,3 +43,4 @@ buck-out/
 android/app/libs
 android/.idea
 android/keystores/debug.keystore
+android/build
