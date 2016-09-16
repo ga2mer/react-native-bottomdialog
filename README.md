@@ -2,8 +2,8 @@
 # react-native-bottomdialog
 React-Native native module for show bottom dialog on Android
 
-![](https://raw.githubusercontent.com/ga2mer/react-native-bottomdialog/master/screenshots/1.png)
-![](https://raw.githubusercontent.com/ga2mer/react-native-bottomdialog/master/screenshots/2.png)
+<img src="https://raw.githubusercontent.com/ga2mer/react-native-bottomdialog/master/screenshots/1.png" width="250">
+<img src="https://raw.githubusercontent.com/ga2mer/react-native-bottomdialog/master/screenshots/2.png" width="250">
 ## Getting started
 
 `$ npm install react-native-bottomdialog --save`
