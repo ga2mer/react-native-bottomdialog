@@ -1,0 +1,20 @@
+
+{
+  "name": "react-native-bottomdialog",
+  "version": "0.0.1",
+  "description": "React-Native native module for show bottom dialog on Android",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native",
+    "android"
+  ],
+  "author": "ga2mer",
+  "license": "MIT",
+  "repository": "https://github.com/ga2mer/react-native-bottomdialog",
+  "peerDependencies": {
+    "react-native": "^0.33.0"
+  }
+}
