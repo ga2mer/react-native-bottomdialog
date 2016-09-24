@@ -1,7 +1,7 @@
 
 {
   "name": "react-native-bottomdialog",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "React-Native native module for show bottom dialog on Android",
   "main": "index.js",
   "scripts": {
