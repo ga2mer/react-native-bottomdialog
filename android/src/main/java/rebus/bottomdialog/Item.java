@@ -25,7 +25,6 @@
 package rebus.bottomdialog;
 
 import android.graphics.drawable.Drawable;
-
 /**
  * Created by raphaelbussa on 19/01/16.
  */
@@ -33,7 +32,7 @@ public class Item {
 
     private int id;
     private String title;
-    private Drawable icon;
+    private String icon;
 
     public int getId() {
         return id;
@@ -51,12 +50,11 @@ public class Item {
         this.title = title;
     }
 
-    public Drawable getIcon() {
+    public String getIcon() {
         return icon;
     }
-
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
+    public void setIcon(String uri) {
+        this.icon = uri;
     }
 
 }

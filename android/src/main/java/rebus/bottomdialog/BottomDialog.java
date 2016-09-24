@@ -50,6 +50,20 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.facebook.common.references.CloseableReference;
+import com.facebook.datasource.DataSource;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
+import com.facebook.imagepipeline.image.CloseableImage;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import android.net.Uri;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import javax.annotation.Nullable;
 
 import com.ga2mer.bottomdialog.R;
 /**
@@ -116,9 +130,10 @@ public class BottomDialog {
         private LinearLayout container;
         private OnItemSelectedListener onItemSelectedListener;
         private List<Item> items;
-
+        private Context context;
         public CustomDialog(Context context) {
             super(context);
+            this.context = context;
             items = new ArrayList<>();
             icon = getContext().getResources().getDimensionPixelSize(R.dimen.dimen_32_dp);
             padding = getContext().getResources().getDimensionPixelSize(R.dimen.dimen_8_dp);
@@ -140,6 +155,21 @@ public class BottomDialog {
             getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         }
 
+        private int getDrawableResourceByName(String name) {
+            return context.getResources().getIdentifier(
+                name,
+                "drawable",
+                context.getPackageName());
+        }
+        private Drawable getDrawableByName(String name) {
+            int drawableResId = getDrawableResourceByName(name);
+            if (drawableResId != 0) {
+                return context.getResources().getDrawable(drawableResId);
+            } else {
+                return null;
+            }
+        }
+
         public void cancelable(boolean value) {
             setCancelable(value);
         }
@@ -159,7 +189,7 @@ public class BottomDialog {
         public void addItem(Item item) {
             int size = icon + padding + padding;
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, size);
-            TextView row = new TextView(getContext());
+            final TextView row = new TextView(getContext());
             row.setId(item.getId());
             row.setLayoutParams(params);
             row.setMaxLines(1);
@@ -173,7 +203,30 @@ public class BottomDialog {
             getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
             row.setBackgroundResource(typedValue.resourceId);
             if (item.getIcon() != null) {
-                row.setCompoundDrawablesWithIntrinsicBounds(icon(item.getIcon()), null, null, null);
+                String uri = item.getIcon();
+                if (uri.startsWith("http://") || uri.startsWith("https://")) {
+                    ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(uri))
+                                                .setAutoRotateEnabled(true)
+                                                .build();
+                    DataSource<CloseableReference<CloseableImage> > dataSource = Fresco.getImagePipeline().fetchDecodedImage(imageRequest, null);
+                    Executor executor = Executors.newSingleThreadExecutor();
+                    dataSource.subscribe(new BaseBitmapDataSubscriber() {
+                        @Override
+                        public void onNewResultImpl(@Nullable Bitmap bitmap) {
+                            if (bitmap != null) {
+                                Drawable iconDrawable = new BitmapDrawable(context.getResources(), bitmap);
+                                row.setCompoundDrawablesWithIntrinsicBounds(icon(iconDrawable), null, null, null);
+                            }
+                        }
+
+                        @Override
+                        public void onFailureImpl(DataSource dataSource) {
+                        }
+                    }, executor);
+                } else {
+                    Drawable iconDrawable = getDrawableByName(uri);
+                    row.setCompoundDrawablesWithIntrinsicBounds(icon(iconDrawable), null, null, null);
+                }
                 row.setCompoundDrawablePadding(padding);
                 row.setPadding(padding, padding, padding, padding);
             } else {
@@ -191,7 +244,7 @@ public class BottomDialog {
                 MenuItem menuItem = menuBuilder.getItem(i);
                 Item item = new Item();
                 item.setId(menuItem.getItemId());
-                item.setIcon(menuItem.getIcon());
+                //item.setIcon(menuItem.getIcon());
                 item.setTitle(menuItem.getTitle().toString());
                 items.add(item);
             }

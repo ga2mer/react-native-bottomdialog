@@ -36,8 +36,13 @@ React-Native native module for show bottom dialog on Android
 import BottomDialog from 'react-native-bottomdialog';
 ...
 var quality = ["720p", "480p", "360p", "240p"];
+var items = ["Quality"];
+//or
+items = [{title: "Quality"}, {title: "Closed Captions", icon: require('./img/cc.png')}];
+//or
+items = ["Quality", {title: "Closed Captions", icon: require('./img/cc.png')}];
 BottomDialog.show({
-    items: ["Quality"]
+    items
 }, () => {
     BottomDialog.show({
         title: 'Select quality', //It will not show title if title is empty
@@ -50,7 +55,7 @@ BottomDialog.show({
 });
 ```
 ## TODO
-- [ ]  Icons
+- [x]  Icons
 
 ## Thanks
 - [rebus007](https://github.com/rebus007) for great [bottom dialogs](https://github.com/rebus007/BottomDialog/)
